@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>המסך המפוצל</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+	  padding-top: 60px;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+	.headline {
+      color: white;
+      text-align: center;
+	  font-family: Roboto, Helvetica, sans-serif;
+      font-size: 14px;
+      padding: 4px 0;
+	  padding-bottom: 20px;
+	  transition: color 0.5s ease;
+    }
+	.name {
+	  color: white;
+      text-align: center;
+	  font-family: Roboto, Helvetica, sans-serif;
+	  font-weight: bold;
+      font-size: 25px;
+      padding: 10px 0;
+	  padding-right: 20px;
+	  position: absolute;
+      top: 0;
+      right: 0;
+	}
+    video {
+	filter: brightness(0.07);
+      width: 100%;
+      height: 100%;
+	  border-radius: 15px;
+      object-fit: cover;
+      background-color: black;
+	  transition: transform 0.5s ease,filter 0.5s ease, opacity 0.5s ease;
+	  
+    }
+
+	video:hover {
+      transform: scale(1.03);
+	  filter: brightness(1);
+	  opacity: 1;
+	}
+	video:fullscreen {
+	filter: brightness(1);
+	opacity: 1;
+	border-radius: 0;
+	transition: none;
+	}
+	video.audio-active{
+	filter: brightness(1);
+	opacity: 1;
+	}
+	  
+    .stream-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+
+    #flag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 45px;
+      width: auto;
+	  padding: 5px 0;
+    }
+
+	
+  </style>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/YouTube_Red_Diamond_Play_Button.svg/768px-YouTube_Red_Diamond_Play_Button.svg.png">
+</head>
+<body>
+
+<img id="flag" src="https://m.media-amazon.com/images/I/61E-LmIYUsL.jpg" alt="Israeli flag" /><div class="name">עָם כְּלָבִיא יָקוּם וְכַאֲרִי יִתְנַשָּׂא</div>
+<div class="stream-container"><video id="video1" controls muted autoplay></video><div class="headline">ערוץ 11</div></div>
+<div class="stream-container"><video id="video2" controls muted autoplay></video><div class="headline">ערוץ 12</div></div>
+<div class="stream-container"><video id="video3" controls muted autoplay></video><div class="headline">ערוץ 13</div></div>
+<div class="stream-container"><video id="video4" controls muted autoplay></video><div class="headline">ערוץ 14</div></div>
+<div class="stream-container"><video id="video5" controls muted autoplay></video><div class="headline">ערוץ 15</div></div>
+<div class="stream-container"><video id="video6" controls muted autoplay></video><div class="headline">המחבלים בני הבליעל</div></div>
+<script>
+const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
+const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1745936986~acl=%2f*~data=hdntl~hmac=8e923800f256bf20b6e4795f3adedcbe127d0103533da90ef4c49d1da8e3658c/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6&_did=f992ce22-2614-4415-9082-f2f4e011b671";
+const tv13 = "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index_3.m3u8";
+const tv14 = "https://ch14channel14contentb-ioriver-cdn.encoders.immergo.tv/master_1.m3u8";
+const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
+const fuckers = "https://live.presstv.ir/hls/presstv.m3u8";
+//const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
+//const big_brother = "https://d2lckchr9cxrss.cloudfront.net/out/v1/c73af7694cce4767888c08a7534b503c/index_3.m3u8";
+
+const lst = [tv11, tv12, tv13,tv14, tv15, fuckers];
+
+function attachStream(video,i){
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(lst[i]);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+		
+    }
+}
+function reloadStream(video,i) {
+    console.log('Reloading stuck video:', video.id);
+    if (video.hlsInstance) {
+        video.hlsInstance.destroy();
+    }
+    attachStream(video,i);
+}
+function updateAudioStatus(video) {
+  const isAudioActive = !video.muted && video.volume > 0;
+  if (isAudioActive) {
+    video.classList.add('audio-active');
+  } else {
+    video.classList.remove('audio-active');
+  }
+}
+
+for (let i = 0; i < 6; i++) {
+    const video = document.getElementById(`video${i+1}`);
+	attachStream(video,i);
+	video.volume = 0.08;
+	updateAudioStatus(video);
+	  ['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
+    video.addEventListener(event, () => updateAudioStatus(video));
+  });
+	let stuckTimeout;
+
+    video.addEventListener('waiting', () => {
+        console.log('Video waiting:', video.id);
+        clearTimeout(stuckTimeout);
+        stuckTimeout = setTimeout(() => reloadStream(video,i), 5000); // If stuck 5 sec
+    });
+
+    video.addEventListener('stalled', () => {
+        console.log('Video stalled:', video.id);
+        clearTimeout(stuckTimeout);
+        stuckTimeout = setTimeout(() => reloadStream(video,i), 5000);
+    });
+
+    video.addEventListener('error', () => {
+        console.log('Video error:', video.id);
+        reloadStream(video,i);
+    });
+
+    video.addEventListener('playing', () => {
+        clearTimeout(stuckTimeout); // Clear if video starts playing
+    });
+
+
+
+}
+
+
+</script>
+
+</body>
+</html>
