@@ -21,6 +21,7 @@
       color: white;
       text-align: center;
 	  font-family: Roboto, Helvetica, sans-serif;
+	  font-weight: bold;
       font-size: 14px;
       padding: 4px 0;
 	  padding-bottom: 20px;
@@ -38,8 +39,7 @@
       top: 0;
       right: 0;
 	}
-    video {
-	filter: brightness(0.07);
+    video {	  
       width: 100%;
       height: 100%;
 	  border-radius: 15px;
@@ -49,20 +49,12 @@
 	  
     }
 
-	video:hover {
-      transform: scale(1.03);
-	  filter: brightness(1);
-	  opacity: 1;
-	}
 	video:fullscreen {
-	filter: brightness(1);
-	opacity: 1;
-	border-radius: 0;
-	transition: none;
+	  border-radius: 0;
+	  transition: none;
 	}
-	video.audio-active{
-	filter: brightness(1);
-	opacity: 1;
+	video.audio-active .snapshot-canvas.active{
+	  display: none;
 	}
 	  
     .stream-container {
@@ -80,27 +72,65 @@
       width: auto;
 	  padding: 5px 0;
     }
-
 	
+    #live {
+      position: absolute;
+      top: 0;
+      right: 1;
+      height: 35px;
+      width: auto;
+	  padding: 15px 0;
+    }
+	.stream-container {
+	  position: relative;
+	}
+
+	.snapshot-canvas {
+	  border-radius: 15px;
+	  overflow: hidden;
+	  position: absolute;
+	  top: 0; left: 0;
+	  width: 100%;
+	  height: 100%;
+	  object-fit: cover;
+	  pointer-events: none;
+	  display: none;
+	}
+
+	.stream-container:not(:hover) .snapshot-canvas.active {
+	  display: block;
+	}
+	.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+
+
   </style>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/YouTube_Red_Diamond_Play_Button.svg/768px-YouTube_Red_Diamond_Play_Button.svg.png">
 </head>
 <body>
 
 <img id="flag" src="https://m.media-amazon.com/images/I/61E-LmIYUsL.jpg" alt="Israeli flag" /><div class="name">עָם כְּלָבִיא יָקוּם וְכַאֲרִי יִתְנַשָּׂא</div>
-<div class="stream-container"><video id="video1" controls muted autoplay></video><div class="headline">ערוץ 11</div></div>
-<div class="stream-container"><video id="video2" controls muted autoplay></video><div class="headline">ערוץ 12</div></div>
-<div class="stream-container"><video id="video3" controls muted autoplay></video><div class="headline">ערוץ 13</div></div>
-<div class="stream-container"><video id="video4" controls muted autoplay></video><div class="headline">ערוץ 14</div></div>
-<div class="stream-container"><video id="video5" controls muted autoplay></video><div class="headline">ערוץ 15</div></div>
-<div class="stream-container"><video id="video6" controls muted autoplay></video><div class="headline">המחבלים בני הבליעל</div></div>
+<img id="live" src="live.gif" alt="Israeli flag" />
+
+<div class="stream-container"><div class="video-wrapper"><video id="video1" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 11</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video3" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 13</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video5" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 15</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">המחבלים בני הבליעל</div></div>
 <script>
 const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
-const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1745936986~acl=%2f*~data=hdntl~hmac=8e923800f256bf20b6e4795f3adedcbe127d0103533da90ef4c49d1da8e3658c/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6&_did=f992ce22-2614-4415-9082-f2f4e011b671";
+const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6"
+//const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1745936986~acl=%2f*~data=hdntl~hmac=8e923800f256bf20b6e4795f3adedcbe127d0103533da90ef4c49d1da8e3658c/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6&_did=f992ce22-2614-4415-9082-f2f4e011b671";
 const tv13 = "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index_3.m3u8";
-const tv14 = "https://ch14channel14contentb-ioriver-cdn.encoders.immergo.tv/master_1.m3u8";
+const tv14 = "https://ch14channel14contentb-ioriver-cdn.encoders.immergo.tv/master_3.m3u8";
 const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
-const fuckers = "https://live.presstv.ir/hls/presstv.m3u8";
+const fuckers = "https://live.presstv.ir/hls/presstv_5_482/index.m3u8";
 //const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
 //const big_brother = "https://d2lckchr9cxrss.cloudfront.net/out/v1/c73af7694cce4767888c08a7534b503c/index_3.m3u8";
 
@@ -128,15 +158,18 @@ function updateAudioStatus(video) {
   const isAudioActive = !video.muted && video.volume > 0;
   if (isAudioActive) {
     video.classList.add('audio-active');
+	
   } else {
     video.classList.remove('audio-active');
   }
 }
 
+const THROTTLE_INTERVAL  = 7000; // milliseconds
+
 for (let i = 0; i < 6; i++) {
     const video = document.getElementById(`video${i+1}`);
 	attachStream(video,i);
-	video.volume = 0.08;
+	video.volume = 0.07;
 	updateAudioStatus(video);
 	  ['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
     video.addEventListener(event, () => updateAudioStatus(video));
@@ -164,11 +197,41 @@ for (let i = 0; i < 6; i++) {
         clearTimeout(stuckTimeout); // Clear if video starts playing
     });
 
+	const container = video.closest('.stream-container');
+	const canvas = container.querySelector('canvas');
 
+	const ctx = canvas.getContext('2d');
+
+	function captureFrame() {
+	const isPlayingAudio = !video.muted && video.volume > 0;
+	if (!container.matches(':hover') && !isPlayingAudio) {
+	  canvas.classList.add('active');
+	  try {
+		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+	  } catch (e) {
+		console.warn('Draw failed:', e);
+	  }
+	} else {
+	  canvas.classList.remove('active'); // reveal full video
+	}
+	}
+	setInterval(captureFrame, THROTTLE_INTERVAL);
+
+	container.addEventListener('mouseenter', () => {
+	canvas.classList.remove('active');
+	});
+	container.addEventListener('mouseleave', () => {
+  captureFrame(); // take snapshot immediately
+});
+	video.addEventListener('loadeddata', () => {
+	    setTimeout(() => captureFrame(), 50); // slight delay to ensure frame available
+
+	  const rect = video.getBoundingClientRect();
+	  canvas.width = rect.width;
+	  canvas.height = rect.height;
+	});
 
 }
-
-
 </script>
 
 </body>
