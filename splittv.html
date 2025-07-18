@@ -1,140 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>המסך המפוצל</title>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <style>
+<meta charset="UTF-8">
+<title>המסך המפוצל</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
     body {
-      margin: 0;
-      background-color: #000;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 5px;
-	  padding-top: 60px;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
+		filter: grayscale(100%);
+		/* margin: 1; */
+		margin: 0;
+		background-color: #000;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(3, 1fr);
+		gap: 5px;
+		padding-top: 60px;
+		/* height: 100vh; */
+		/* width: 100vw; */
+		overflow: hidden;
     }
+	
 	.headline {
-      color: white;
-      text-align: center;
-	  font-family: Roboto, Helvetica, sans-serif;
-	  font-weight: bold;
-      font-size: 14px;
-      padding: 4px 0;
-	  padding-bottom: 20px;
-	  transition: color 0.5s ease;
+		color: white;
+		text-align: right;
+		font-family: Roboto, Helvetica, sans-serif;
+		font-weight: bold;
+		font-size: 15px;
+		padding: 5px 0;
+		padding-bottom: 20px;
+		/* padding-right: 10px; */
     }
+	
 	.name {
-	  color: white;
-      text-align: center;
-	  font-family: Roboto, Helvetica, sans-serif;
-	  font-weight: bold;
-      font-size: 25px;
-      padding: 10px 0;
-	  padding-right: 20px;
-	  position: absolute;
-      top: 0;
-      right: 0;
+		color: white;
+		text-align: center;
+		font-family: Roboto, Helvetica, sans-serif;
+		font-weight: bold;
+		font-size: 25px;
+		padding: 10px 0;
+		padding-right: 60px;
+		position: absolute;
+		top: 0;
+		right: 0;
 	}
+	
     video {	  
-      width: 100%;
-      height: 100%;
-	  border-radius: 15px;
-      object-fit: cover;
-      background-color: black;
-	  transition: transform 0.5s ease,filter 0.5s ease, opacity 0.5s ease;
-	  
+		padding-left: 12.5px;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		background-color: black;
+		/*transition: transform 0.5s ease,filter 0.5s ease, opacity 0.5s ease;*/
+		/*border-radius: 12.5px;*/
     }
 
 	video:fullscreen {
-	  border-radius: 0;
-	  transition: none;
+		border-radius: 0;
+		transition: none;
 	}
+	
 	video.audio-active .snapshot-canvas.active{
-	  display: none;
+		display: none;
 	}
 	  
     .stream-container {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+		position: relative;
     }
 
     #flag {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 45px;
-      width: auto;
-	  padding: 5px 0;
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 45px;
+		padding: 5px 0;
     }
 	
-    #live {
-      position: absolute;
-      top: 0;
-      right: 1;
-      height: 35px;
-      width: auto;
-	  padding: 15px 0;
-    }
-	.stream-container {
-	  position: relative;
-	}
-
 	.snapshot-canvas {
-	  border-radius: 15px;
-	  overflow: hidden;
-	  position: absolute;
-	  top: 0; left: 0;
-	  width: 100%;
-	  height: 100%;
-	  object-fit: cover;
-	  pointer-events: none;
-	  display: none;
+		padding-left: 12.5px;
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		/*object-fit: cover;*/
+		pointer-events: none;
+		display: none;
+		/*border-radius: 12.5px;*/
 	}
-
+	
 	.stream-container:not(:hover) .snapshot-canvas.active {
-	  display: block;
+		display: block;
+	}
+	
+	.stream-container:hover .snapshot-canvas.active{
+		border-radius: 0;
+	}
+	
+	.stream-container:hover video {
+		border-radius: 0;
+	}
+	.stream-container:hover .video-wrapper {
+		border-radius: 0;
 	}
 	.video-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-}
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16/9;
+		overflow: hidden;
+		border-radius: 12.5px;
+	}
+	.made-by {
+		color: white;
+		font-family: Helvetica;
+		padding-left: 12.5px;
+		font-size: 15px;
+	}
 
-
-
-  </style>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/YouTube_Red_Diamond_Play_Button.svg/768px-YouTube_Red_Diamond_Play_Button.svg.png">
+</style>
 </head>
+
 <body>
-
-<img id="flag" src="https://m.media-amazon.com/images/I/61E-LmIYUsL.jpg" alt="Israeli flag" /><div class="name">עָם כְּלָבִיא יָקוּם וְכַאֲרִי יִתְנַשָּׂא</div>
-<img id="live" src="live.gif" alt="Israeli flag" />
-
+<img id="flag" src="menora.png" alt="Israeli flag" /><div class="name">המסך המפוצל המפואר</div>
 <div class="stream-container"><div class="video-wrapper"><video id="video1" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 11</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️📈</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video3" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 13</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️📈</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video5" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 15</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">המחבלים בני הבליעל</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ הכנסת</div></div>
+<div class="made-by">Made With ❤️ By Alon Levy</div>
 <script>
 const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
-const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6"
-//const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1745936986~acl=%2f*~data=hdntl~hmac=8e923800f256bf20b6e4795f3adedcbe127d0103533da90ef4c49d1da8e3658c/profileManifest.m3u8?_uid=c5524693-441e-4122-b1c9-495f1044e6c4&rK=a6&_did=f992ce22-2614-4415-9082-f2f4e011b671";
-const tv13 = "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index_3.m3u8";
-const tv14 = "https://ch14channel14contentb-ioriver-cdn.encoders.immergo.tv/master_3.m3u8";
+const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671"
+//const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671";
+const tv13 = "https://reshet.g-mana.live/media/87f59c77-03f6-4bad-a648-897e095e7360/mainManifest.m3u8";
+const tv14 = "https://n-121-6.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8";
 const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
-const fuckers = "https://live.presstv.ir/hls/presstv_5_482/index.m3u8";
-//const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
+const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
 //const big_brother = "https://d2lckchr9cxrss.cloudfront.net/out/v1/c73af7694cce4767888c08a7534b503c/index_3.m3u8";
 
-const lst = [tv11, tv12, tv13,tv14, tv15, fuckers];
+const lst = [tv11, tv12, tv13,tv14, tv15, knesset];
 
 function attachStream(video,i){
     if (Hls.isSupported()) {
@@ -147,6 +156,7 @@ function attachStream(video,i){
 		
     }
 }
+
 function reloadStream(video,i) {
     console.log('Reloading stuck video:', video.id);
     if (video.hlsInstance) {
@@ -154,30 +164,48 @@ function reloadStream(video,i) {
     }
     attachStream(video,i);
 }
+
 function updateAudioStatus(video) {
-  const isAudioActive = !video.muted && video.volume > 0;
-  if (isAudioActive) {
-    video.classList.add('audio-active');
-	
-  } else {
-    video.classList.remove('audio-active');
-  }
+	const isAudioActive = !video.muted && video.volume > 0;
+	if (isAudioActive) {
+		video.classList.add('audio-active');
+	} 
+	else {
+		video.classList.remove('audio-active');
+	}
 }
 
-const THROTTLE_INTERVAL  = 7000; // milliseconds
+function captureFrame(container,canvas,video) {
+	const ctx = canvas.getContext('2d');
+	const isPlayingAudio = !video.muted && video.volume > 0;
+	if (!container.matches(':hover') && !isPlayingAudio) {
+		canvas.classList.add('active');
+		try {
+			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+		} 
+		catch (e) {
+			console.warn('Draw failed:', e);
+		}
+	} 
+	else {
+	  canvas.classList.remove('active'); // reveal full video
+	}
+}
+
+const THROTTLE_INTERVAL  = 60000; // milliseconds
 
 for (let i = 0; i < 6; i++) {
     const video = document.getElementById(`video${i+1}`);
 	attachStream(video,i);
 	video.volume = 0.07;
 	updateAudioStatus(video);
-	  ['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
-    video.addEventListener(event, () => updateAudioStatus(video));
-  });
+	['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
+		video.addEventListener(event, () => updateAudioStatus(video));
+	});
+	
 	let stuckTimeout;
-
     video.addEventListener('waiting', () => {
-        console.log('Video waiting:', video.id);
+		console.log('Video waiting:', video.id);
         clearTimeout(stuckTimeout);
         stuckTimeout = setTimeout(() => reloadStream(video,i), 5000); // If stuck 5 sec
     });
@@ -199,40 +227,21 @@ for (let i = 0; i < 6; i++) {
 
 	const container = video.closest('.stream-container');
 	const canvas = container.querySelector('canvas');
-
-	const ctx = canvas.getContext('2d');
-
-	function captureFrame() {
-	const isPlayingAudio = !video.muted && video.volume > 0;
-	if (!container.matches(':hover') && !isPlayingAudio) {
-	  canvas.classList.add('active');
-	  try {
-		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-	  } catch (e) {
-		console.warn('Draw failed:', e);
-	  }
-	} else {
-	  canvas.classList.remove('active'); // reveal full video
-	}
-	}
-	setInterval(captureFrame, THROTTLE_INTERVAL);
+	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
 
 	container.addEventListener('mouseenter', () => {
-	canvas.classList.remove('active');
+		canvas.classList.remove('active');
 	});
 	container.addEventListener('mouseleave', () => {
-  captureFrame(); // take snapshot immediately
-});
-	video.addEventListener('loadeddata', () => {
-	    setTimeout(() => captureFrame(), 50); // slight delay to ensure frame available
-
-	  const rect = video.getBoundingClientRect();
-	  canvas.width = rect.width;
-	  canvas.height = rect.height;
+		captureFrame(container, canvas, video); // take snapshot immediately
 	});
-
+	video.addEventListener('loadeddata', () => {
+		setTimeout(() => captureFrame(container, canvas, video), 50); // slight delay to ensure frame available
+		const rect = video.getBoundingClientRect();
+		canvas.width = rect.width;
+		canvas.height = rect.height;
+	});
 }
 </script>
-
 </body>
 </html>
