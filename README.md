@@ -1,2 +1,3 @@
-Light, beautiful, Reliable.
-<img width="2559" height="1186" alt="image" src="https://github.com/user-attachments/assets/d20adbc4-97c0-4962-9779-be8a571932ed" />
+light, beautiful, reliable. Your best place to get the latest local news.
+<img width="2690" height="1443" alt="chrome_q4rNxUNDmv" src="https://github.com/user-attachments/assets/7937cea3-e87c-49ff-9c7e-b0328246c215" />
+
