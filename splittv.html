@@ -6,7 +6,6 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
     body {
-		filter: grayscale(100%);
 		/* margin: 1; */
 		margin: 0;
 		background-color: #000;
@@ -45,6 +44,7 @@
 	}
 	
     video {	  
+		filter: grayscale(100%);
 		padding-left: 12.5px;
 		width: 100%;
 		height: 100%;
@@ -55,6 +55,7 @@
     }
 
 	video:fullscreen {
+		filter: none;
 		border-radius: 0;
 		transition: none;
 	}
@@ -62,7 +63,7 @@
 	video.audio-active .snapshot-canvas.active{
 		display: none;
 	}
-	  
+
     .stream-container {
 		display: flex;
 		flex-direction: column;
@@ -80,6 +81,7 @@
     }
 	
 	.snapshot-canvas {
+		filter: grayscale(100%);
 		padding-left: 12.5px;
 		overflow: hidden;
 		position: absolute;
