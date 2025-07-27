@@ -60,10 +60,15 @@
 		transition: none;
 	}
 	
-	video.audio-active .snapshot-canvas.active{
+	/* video.audio-active .snapshot-canvas.active{
+		filter: none;
 		display: none;
-	}
+	} */
 
+	video.audio-active{
+		filter: grayscale(0%);
+		transition: filter 0.2s ease;
+	}
     .stream-container {
 		display: flex;
 		flex-direction: column;
