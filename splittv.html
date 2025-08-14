@@ -67,7 +67,7 @@
 
 	video.audio-active{
 		filter: none;
-		/* transition: filter 0.2s ease; */
+		transition: filter 0.2s ease;
 	}
     .stream-container {
 		display: flex;
@@ -77,12 +77,12 @@
 		position: relative;
     }
 
-    #flag {
+    #logo {
 		position: absolute;
 		top: 0;
 		right: 0;
-		height: 45px;
-		padding: 5px 0;
+		height: 35px;
+		padding: 8px 0;
     }
 	
 	.snapshot-canvas {
@@ -132,14 +132,14 @@
 </head>
 
 <body>
-<img id="flag" src="menora.png" alt="Israeli flag" /><div class="name">המסך המפוצל המפואר</div>
+<img id="logo" src="logo.png" alt="logo" /><div class="name">המסך המפוצל המפואר</div>
 <div class="stream-container"><div class="video-wrapper"><video id="video1" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 11</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️📈</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video3" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 13</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️📈</div></div>
+<div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video5" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 15</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ הכנסת</div></div>
-<div class="made-by">Made With ❤️ By Alon Levy</div>
+<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">fox</div></div>
+<div class="made-by">Made With 🧡 By Alon (Blademind)</div>
 <script>
 const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
 const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671"
@@ -147,10 +147,10 @@ const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dv
 const tv13 = "https://reshet.g-mana.live/media/87f59c77-03f6-4bad-a648-897e095e7360/mainManifest.m3u8";
 const tv14 = "https://n-121-6.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8";
 const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
-const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
-//const big_brother = "https://d2lckchr9cxrss.cloudfront.net/out/v1/c73af7694cce4767888c08a7534b503c/index_3.m3u8";
+//const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
+const fox = "http://23.237.104.106:8080/USA_FOX_NEWS/index.m3u8"
 
-const lst = [tv11, tv12, tv13,tv14, tv15, knesset];
+const lst = [tv11, tv12, tv13,tv14, tv15, fox];
 
 function attachStream(video,i){
     if (Hls.isSupported()) {
