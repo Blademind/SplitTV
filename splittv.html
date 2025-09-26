@@ -237,15 +237,20 @@ for (let i = 0; i < 6; i++) {
 
 	const container = video.closest('.stream-container');
 	const canvas = container.querySelector('canvas');
+	var flag = false
 	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
 	container.addEventListener('mouseenter', () => {
 		hoverTimeout = setTimeout(() =>{
 		canvas.classList.remove('active');
+		flag = true;
 		}, 500)
 	});
 	container.addEventListener('mouseleave', () => {
 		clearTimeout(hoverTimeout);
+		if (flag) {
 		captureFrame(container, canvas, video); // take snapshot immediately
+		flag = false;
+		}
 	});
 	video.addEventListener('loadeddata', () => {
 		setTimeout(() => captureFrame(container, canvas, video), 50); // slight delay to ensure frame available
