@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>המסך המפוצל</title>
+<title>המפוצל</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
     body {
@@ -44,7 +44,7 @@
 	}
 	
     video {	  
-		filter: grayscale(100%);
+		/* filter: grayscale(100%); */
 		padding-left: 12.5px;
 		width: 100%;
 		height: 100%;
@@ -86,7 +86,7 @@
     }
 	
 	.snapshot-canvas {
-		filter: grayscale(100%);
+		/* filter: grayscale(100%); */
 		padding-left: 12.5px;
 		overflow: hidden;
 		position: absolute;
@@ -100,7 +100,7 @@
 		/*border-radius: 12.5px;*/
 	}
 	
-	.stream-container:not(:hover) .snapshot-canvas.active {
+	.snapshot-canvas.active {
 		display: block;
 	}
 	
@@ -111,6 +111,7 @@
 	.stream-container:hover video {
 		border-radius: 0;
 	}
+	
 	.stream-container:hover .video-wrapper {
 		border-radius: 0;
 	}
@@ -132,14 +133,15 @@
 </head>
 
 <body>
-<img id="logo" src="logo.png" alt="logo" /><div class="name">המסך המפוצל המפואר</div>
+
+<img id="logo" src="logo.png" alt="logo" /><div class="name">המפוצל</div>
 <div class="stream-container"><div class="video-wrapper"><video id="video1" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 11</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video3" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 13</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video4" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 14️</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video5" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 15</div></div>
-<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">fox</div></div>
-<div class="made-by">Made With 🧡 By Alon (Blademind)</div>
+<div class="stream-container"><div class="video-wrapper"><video id="video6" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">הכנסת</div></div>
+<!-- <div class="made-by">Made With 🧡 By Alon (Blademind)</div> -->
 <script>
 const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
 const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671"
@@ -147,10 +149,10 @@ const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dv
 const tv13 = "https://reshet.g-mana.live/media/87f59c77-03f6-4bad-a648-897e095e7360/mainManifest.m3u8";
 const tv14 = "https://n-121-6.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8";
 const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
-//const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
+const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
 const fox = "http://23.237.104.106:8080/USA_FOX_NEWS/index.m3u8"
 
-const lst = [tv11, tv12, tv13,tv14, tv15, fox];
+const lst = [tv11, tv12, tv13,tv14, tv15, knesset];
 
 function attachStream(video,i){
     if (Hls.isSupported()) {
@@ -193,6 +195,7 @@ function captureFrame(container,canvas,video) {
 		catch (e) {
 			console.warn('Draw failed:', e);
 		}
+
 	} 
 	else {
 	  canvas.classList.remove('active'); // reveal full video
@@ -235,11 +238,13 @@ for (let i = 0; i < 6; i++) {
 	const container = video.closest('.stream-container');
 	const canvas = container.querySelector('canvas');
 	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
-
 	container.addEventListener('mouseenter', () => {
+		hoverTimeout = setTimeout(() =>{
 		canvas.classList.remove('active');
+		}, 500)
 	});
 	container.addEventListener('mouseleave', () => {
+		clearTimeout(hoverTimeout);
 		captureFrame(container, canvas, video); // take snapshot immediately
 	});
 	video.addEventListener('loadeddata', () => {
