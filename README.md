@@ -2,6 +2,6 @@
 
 # SplitTV Project
 
-light, beautiful, reliable. Your best place to get the latest local news.
+light and beautiful split screen for Israeli channels. probably the best place to get the latest local news.
 
-<img width="2690" height="1443" alt="chrome_q4rNxUNDmv" src="https://github.com/user-attachments/assets/7937cea3-e87c-49ff-9c7e-b0328246c215" />
+<img width="1919" height="868" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d002d016-9214-4038-bbda-1613afb17480" />
