@@ -251,7 +251,7 @@ for (let i = 0; i < 6; i++) {
 		captureFrame(container, canvas, video); // take snapshot immediately
 		flag = false;
 		}
-		flag = true
+
 	});
 	video.addEventListener('loadeddata', () => {
 		setTimeout(() => captureFrame(container, canvas, video), 50); // slight delay to ensure frame available
