@@ -45,7 +45,7 @@
 	
     video {	  
 		/* filter: grayscale(100%); */
-		padding-left: 12.5px;
+		/* padding-left: 12.5px; */
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -65,16 +65,23 @@
 		display: none;
 	} */
 
-	video.audio-active{
+	video.audio-active {
 		filter: none;
 		transition: filter 0.2s ease;
+
 	}
+
+	/* video.audio-active .video-wrapper{
+		border-radius: 0;
+
+	} */
     .stream-container {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
 		position: relative;
+		
     }
 
     #logo {
@@ -87,7 +94,7 @@
 	
 	.snapshot-canvas {
 		/* filter: grayscale(100%); */
-		padding-left: 12.5px;
+		/* padding-left: 12.5px; */
 		overflow: hidden;
 		position: absolute;
 		top: 0;
@@ -98,20 +105,29 @@
 		pointer-events: none;
 		display: none;
 		/*border-radius: 12.5px;*/
+
 	}
 	
 	.snapshot-canvas.active {
 		display: block;
+		
 	}
+	/* .video-wrapper .snapshot-canvas.active{
+		cursor: pointer
+		
+	} */
+	/* .snapshot-canvas.border {
+		border-radius: 0;
+	} */
 	
-	.stream-container:hover .snapshot-canvas.active{
+	/* .stream-container:hover .snapshot-canvas.active{
+		border-radius: 0;
+	} */
+	
+	/* .stream-container:hover video {
 		border-radius: 0;
 	}
-	
-	.stream-container:hover video {
-		border-radius: 0;
-	}
-	
+	 */
 	.stream-container:hover .video-wrapper {
 		border-radius: 0;
 	}
@@ -175,11 +191,14 @@ function reloadStream(video,i) {
 }
 
 function updateAudioStatus(video) {
+	const video_wrapper = video.closest('.video-wrapper');
 	const isAudioActive = !video.muted && video.volume > 0;
 	if (isAudioActive) {
+		video_wrapper.style.borderRadius  = "0px"
 		video.classList.add('audio-active');
 	} 
 	else {
+		video_wrapper.style.borderRadius  = "12.5px"
 		video.classList.remove('audio-active');
 	}
 }
@@ -188,6 +207,7 @@ function captureFrame(container,canvas,video) {
 	const ctx = canvas.getContext('2d');
 	const isPlayingAudio = !video.muted && video.volume > 0;
 	if (!container.matches(':hover') && !isPlayingAudio) {
+		container.style.cursor = 'pointer';
 		canvas.classList.add('active');
 		try {
 			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -198,7 +218,8 @@ function captureFrame(container,canvas,video) {
 
 	} 
 	else {
-	  canvas.classList.remove('active'); // reveal full video
+		container.style.cursor = '';
+	  	canvas.classList.remove('active'); // reveal full video
 	}
 }
 
@@ -207,7 +228,7 @@ const THROTTLE_INTERVAL  = 60000; // milliseconds
 for (let i = 0; i < 6; i++) {
     const video = document.getElementById(`video${i+1}`);
 	attachStream(video,i);
-	video.volume = 0.07;
+	video.volume = 0.03;
 	updateAudioStatus(video);
 	['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
 		video.addEventListener(event, () => updateAudioStatus(video));
@@ -235,20 +256,23 @@ for (let i = 0; i < 6; i++) {
         clearTimeout(stuckTimeout); // Clear if video starts playing
     });
 
-	const container = video.closest('.stream-container');
+	const container = video.closest('.video-wrapper');
 	const canvas = container.querySelector('canvas');
 	var flag = false
 	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
 	container.addEventListener('mouseenter', () => {
 		hoverTimeout = setTimeout(() =>{
-		canvas.classList.remove('active');
+			container.style.cursor = '';
+			canvas.classList.remove('active');
 		flag = true;
-		}, 500)
+		}, 700)
 	});
 	container.addEventListener('mouseleave', () => {
 		clearTimeout(hoverTimeout);
 		if (flag) {
+		setTimeout(() =>{
 		captureFrame(container, canvas, video); // take snapshot immediately
+		}, 700)
 		flag = false;
 		}
 
