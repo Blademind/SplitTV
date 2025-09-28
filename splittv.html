@@ -106,12 +106,17 @@
 		pointer-events: none;
 		display: none;
 		/*border-radius: 12.5px;*/
+		transition: opacity 0.5s ease;
 
 	}
 	
 	.snapshot-canvas.active {
 		display: block;
-		
+		opacity: 1;
+	}
+	.snapshot-canvas:not(.active) {
+		display: block;
+		opacity: 0;
 	}
 	/* .video-wrapper .snapshot-canvas.active{
 		cursor: pointer
@@ -145,6 +150,7 @@
 		padding-left: 12.5px;
 		font-size: 15px;
 	}
+	
 
 </style>
 </head>
@@ -286,6 +292,7 @@ for (let i = 0; i < 6; i++) {
 	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
 	
 	container.addEventListener('mouseenter', () => {
+		canvas.style.transition = "opacity 0.5s ease";
 		hoverTimeout = setTimeout(() =>{
 	// handleEnter(canvas, container);
 		// if (enter || leave) {
@@ -298,6 +305,7 @@ for (let i = 0; i < 6; i++) {
 	});
 	container.addEventListener('mouseleave', () => {
 	clearTimeout(hoverTimeout);
+	canvas.style.transition = "none";
 		// handleLeave(container, canvas, video);
 	// if (leave || enter)/ {
 	// return}
