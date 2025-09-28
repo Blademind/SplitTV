@@ -129,9 +129,9 @@
 		border-radius: 0;
 	}
 	 */
-	.stream-container:hover .video-wrapper {
+	/* .stream-container:hover .video-wrapper {
 		border-radius: 0;
-	}
+	} */
 	.video-wrapper {
 		position: relative;
 		width: 100%;
@@ -191,15 +191,14 @@ function reloadStream(video,i) {
     attachStream(video,i);
 }
 
-function updateAudioStatus(video) {
-	const video_wrapper = video.closest('.video-wrapper');
+function updateAudioStatus(container,video) {
 	const isAudioActive = !video.muted && video.volume > 0;
 	if (isAudioActive) {
-		video_wrapper.style.borderRadius  = "0px"
+		container.style.borderRadius  = "0px"
 		video.classList.add('audio-active');
 	} 
 	else {
-		video_wrapper.style.borderRadius  = "12.5px"
+		container.style.borderRadius  = "12.5px"
 		video.classList.remove('audio-active');
 	}
 }
@@ -224,15 +223,41 @@ function captureFrame(container,canvas,video) {
 	}
 }
 
-const THROTTLE_INTERVAL  = 60000; // milliseconds
+function handleEnter(canvas, container) {
+	if (lockFlag) {
+		return
+	}
+	lockFlag = true;
+	container.style.cursor = '';
+	canvas.classList.remove('active');
 
+}
+
+function handleLeave(container, canvas, video) {
+	if (!lockFlag){
+		return
+	}
+	if (lockFlag) {
+		setTimeout(() =>{
+		captureFrame(container, canvas, video); // take snapshot immediately
+	}, 700)
+	lockFlag = false;
+		}
+}
+
+const THROTTLE_INTERVAL  = 60000; // milliseconds
+var lockFlag = false;
+var hoverTimeout;
 for (let i = 0; i < 6; i++) {
     const video = document.getElementById(`video${i+1}`);
+	const container = video.closest('.video-wrapper');
+	const canvas = container.querySelector('canvas');
+	var flag = false
 	attachStream(video,i);
-	video.volume = 0.03;
-	updateAudioStatus(video);
+	video.volume = 0.04;
+	updateAudioStatus(container, video);
 	['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
-		video.addEventListener(event, () => updateAudioStatus(video));
+		video.addEventListener(event, () => updateAudioStatus(container,video));
 	});
 	
 	let stuckTimeout;
@@ -256,27 +281,33 @@ for (let i = 0; i < 6; i++) {
     video.addEventListener('playing', () => {
         clearTimeout(stuckTimeout); // Clear if video starts playing
     });
-
-	const container = video.closest('.video-wrapper');
-	const canvas = container.querySelector('canvas');
-	var flag = false
+	// var leave = false
+	// var enter = false
 	setInterval(captureFrame, THROTTLE_INTERVAL, container, canvas, video);
+	
 	container.addEventListener('mouseenter', () => {
 		hoverTimeout = setTimeout(() =>{
-			container.style.cursor = '';
-			canvas.classList.remove('active');
-		flag = true;
-		}, 700)
+	// handleEnter(canvas, container);
+		// if (enter || leave) {
+		// return
+	// }
+	flag = true;
+	container.style.cursor = '';
+	canvas.classList.remove('active');
+	}, 500)
 	});
 	container.addEventListener('mouseleave', () => {
-		clearTimeout(hoverTimeout);
-		if (flag) {
+	clearTimeout(hoverTimeout);
+		// handleLeave(container, canvas, video);
+	// if (leave || enter)/ {
+	// return}
+	if (flag) {
+		// leave = true
 		setTimeout(() =>{
 		captureFrame(container, canvas, video); // take snapshot immediately
-		}, 700)
-		flag = false;
+	}, 0)
+	flag = false;
 		}
-
 	});
 	video.addEventListener('loadeddata', () => {
 		setTimeout(() => captureFrame(container, canvas, video), 50); // slight delay to ensure frame available
