@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>המפוצל</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+
 <style>
     body {
 		/* margin: 1; */
@@ -167,13 +169,13 @@
 <!-- <div class="made-by">Made With 🧡 By Alon (Blademind)</div> -->
 <script>
 const tv11 = "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_4k/chunklist.m3u8";
-const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671"
+const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671";
 //const tv12 = "https://mako-streaming.akamaized.net/stream/hls/live/2033791/k12dvr/profile/5/hdntl=exp=1752685453~acl=%2f*~data=hdntl~hmac=65a29d1cefeb7f670c67a1920be1068b2ef2477179e3d63024cd714b6fafdca1/profileManifest.m3u8?_uid=71004289-468b-4ec1-9aa4-b6e669677fc6&rK=b2&_did=f992ce22-2614-4415-9082-f2f4e011b671";
 const tv13 = "https://reshet.g-mana.live/media/87f59c77-03f6-4bad-a648-897e095e7360/mainManifest.m3u8";
 const tv14 = "https://n-121-6.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8";
 const tv15 = "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8";
-const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"
-const fox = "http://23.237.104.106:8080/USA_FOX_NEWS/index.m3u8"
+const knesset = "https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8";
+const fox = "http://23.237.104.106:8080/USA_FOX_NEWS/index.m3u8";
 
 const lst = [tv11, tv12, tv13,tv14, tv15, knesset];
 
@@ -200,23 +202,36 @@ function reloadStream(video,i) {
 function updateAudioStatus(container,video) {
 	const isAudioActive = !video.muted && video.volume > 0;
 	if (isAudioActive) {
-		container.style.borderRadius  = "0px"
+		container.style.borderRadius  = "0px";
 		video.classList.add('audio-active');
 	} 
 	else {
-		container.style.borderRadius  = "12.5px"
+		container.style.borderRadius  = "12.5px";
 		video.classList.remove('audio-active');
 	}
 }
 
 function captureFrame(container,canvas,video) {
 	const ctx = canvas.getContext('2d');
+
 	const isPlayingAudio = !video.muted && video.volume > 0;
 	if (!container.matches(':hover') && !isPlayingAudio) {
 		container.style.cursor = 'pointer';
 		canvas.classList.add('active');
 		try {
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;
 			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+		Tesseract.recognize(canvas, 'heb', {
+		// tessedit_pageseg_mode: 7, // single text line
+		
+	}).then(({ data: { text } }) => {
+
+		if (text.includes('חוזרים בעוד') || text.includes('מיד חוזרים') || text.includes('מתחילים בעוד')) {
+		console.log('🔍 Found keyword on screen!');
+		}
+	}).catch(err => console.error('OCR failed:', err));
+	
 		} 
 		catch (e) {
 			console.warn('Draw failed:', e);
@@ -246,26 +261,26 @@ function handleLeave(container, canvas, video) {
 	if (lockFlag) {
 		setTimeout(() =>{
 		captureFrame(container, canvas, video); // take snapshot immediately
-	}, 700)
+	}, 700);
 	lockFlag = false;
 		}
 }
 
-const THROTTLE_INTERVAL  = 60000; // milliseconds
+
+const THROTTLE_INTERVAL = 60000; // milliseconds
 var lockFlag = false;
 var hoverTimeout;
 for (let i = 0; i < 6; i++) {
     const video = document.getElementById(`video${i+1}`);
 	const container = video.closest('.video-wrapper');
 	const canvas = container.querySelector('canvas');
-	var flag = false
+	var flag = false;
 	attachStream(video,i);
 	video.volume = 0.04;
 	updateAudioStatus(container, video);
 	['volumechange', 'mouseenter', 'mouseleave', 'play'].forEach(event => {
 		video.addEventListener(event, () => updateAudioStatus(container,video));
 	});
-	
 	let stuckTimeout;
     video.addEventListener('waiting', () => {
 		console.log('Video waiting:', video.id);
@@ -293,6 +308,7 @@ for (let i = 0; i < 6; i++) {
 	
 	container.addEventListener('mouseenter', () => {
 		canvas.style.transition = "opacity 0.5s ease";
+		
 		hoverTimeout = setTimeout(() =>{
 	// handleEnter(canvas, container);
 		// if (enter || leave) {
@@ -301,7 +317,7 @@ for (let i = 0; i < 6; i++) {
 	flag = true;
 	container.style.cursor = '';
 	canvas.classList.remove('active');
-	}, 500)
+	}, 500);
 	});
 	container.addEventListener('mouseleave', () => {
 	clearTimeout(hoverTimeout);
@@ -313,7 +329,7 @@ for (let i = 0; i < 6; i++) {
 		// leave = true
 		setTimeout(() =>{
 		captureFrame(container, canvas, video); // take snapshot immediately
-	}, 0)
+	}, 0);
 	flag = false;
 		}
 	});
@@ -323,6 +339,7 @@ for (let i = 0; i < 6; i++) {
 		canvas.width = rect.width;
 		canvas.height = rect.height;
 	});
+	
 }
 </script>
 </body>
