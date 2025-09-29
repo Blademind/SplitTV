@@ -4,4 +4,6 @@
 
 light and beautiful split screen for Israeli channels. probably the best place to get the latest local news.
 
+next up:
+- dynamic ad blocker
 <img width="1919" height="868" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d002d016-9214-4038-bbda-1613afb17480" />
