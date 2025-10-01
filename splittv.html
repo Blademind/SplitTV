@@ -70,7 +70,7 @@
 
 	video.audio-active {
 		filter: none;
-		transition: filter 0.2s ease;
+		/* transition: filter 0.2s ease; */
 
 	}
 
@@ -108,7 +108,7 @@
 		pointer-events: none;
 		display: none;
 		/*border-radius: 12.5px;*/
-		transition: opacity 0.5s ease;
+		transition: opacity 0.3s ease;
 
 	}
 	
@@ -317,7 +317,7 @@ for (let i = 0; i < 6; i++) {
 	flag = true;
 	container.style.cursor = '';
 	canvas.classList.remove('active');
-	}, 500);
+	}, 300);
 	});
 	container.addEventListener('mouseleave', () => {
 	clearTimeout(hoverTimeout);
