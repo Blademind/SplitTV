@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>המפוצל</title>
+<title>Split</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
@@ -14,8 +14,8 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: repeat(3, 1fr);
-		row-gap: 30px;
-		column-gap: 15px;
+		row-gap: 60px;
+		column-gap: 20px;
 		padding-top: 60px;
 		/* height: 100vh; */
 		/* width: 100vw; */
@@ -27,12 +27,21 @@
 		text-align: right;
 		font-family: Roboto, Helvetica, sans-serif;
 		font-weight: bold;
-		font-size: 15px;
+		font-size: 17.5px;
 		padding: 5px 0;
 		padding-bottom: 20px;
 		/* padding-right: 10px; */
     }
-	
+	.test {
+		/* color: white; */
+		text-align: right;
+		/* font-family: Roboto, Helvetica, sans-serif; */
+		/* font-weight: bold; */
+		/* font-size: 15px; */
+		padding: 5px 0;
+		/* padding-bottom: 20px; */
+		/* padding-right: 10px; */
+    }
 	.name {
 		color: white;
 		text-align: center;
@@ -159,7 +168,7 @@
 
 <body>
 
-<img id="logo" src="logo.png" alt="logo" /><div class="name">המפוצל</div>
+<img id="logo" src="logo.png" alt="logo" /><div class="name">Split</div>
 <div class="stream-container"><div class="video-wrapper"><video id="video1" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 11</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video2" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 12️</div></div>
 <div class="stream-container"><div class="video-wrapper"><video id="video3" controls muted autoplay></video><canvas class="snapshot-canvas"></canvas></div><div class="headline">ערוץ 13</div></div>
